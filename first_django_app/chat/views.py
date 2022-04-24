@@ -5,6 +5,7 @@ from .models import Chat, Message
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 @login_required(login_url='/login/')
@@ -29,3 +30,36 @@ def login_view(request):
         else:
             return render(request, 'auth/login.html', {'wrongPassword': True, 'redirect': redirect})
     return render(request,'auth/login.html', {'redirect': redirect})
+
+
+def register_view(request):
+    if request.method == 'POST':
+        userName = request.POST.get('username', None)
+        userPass = request.POST.get('password', None)
+        user = user.objects.create(userName, userPass)
+        user.save() 
+        return render(request, 'chat/index.html')    
+    return render(request,'auth/register.html')
+
+
+def register_view(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            login(request, user)
+            return render(request, 'chat/index.html',)
+
+        else:
+            for msg in form.error_messages:
+                print(form.error_messages[msg])
+
+            return render(request = request,
+                          template_name = "auth/register.html",
+                          context={"form":form})
+
+    form = UserCreationForm
+    return render(request = request,
+                  template_name = "auth/register.html",
+                  context={"form":form})
