@@ -21,7 +21,7 @@
                 <!-- Title -->
                 <span class="mdl-layout-title">
                 {%if request.user.is_authenticated%}
-                Welcome, {{request.user.first_name}}!
+                Welcome, {{request.user.username}}!
                 {%else%}
                 Welcome. Please log in.
                 {%endif%}
@@ -30,21 +30,12 @@
                 <!-- Add spacer, to align navigation to the right -->
                 <div class="mdl-layout-spacer"></div>
                 <!-- Navigation. We hide it in small screens. -->
-                <nav class="mdl-navigation mdl-layout--large-screen-only">
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                </nav>
             </div>
         </header>
         <div class="mdl-layout__drawer">
             <span class="mdl-layout-title">Chatroom</span>
             <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">My Chatroom</a>
             </nav>
         </div>
         <main class="mdl-layout__content">

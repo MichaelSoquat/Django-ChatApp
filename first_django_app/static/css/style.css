@@ -1,7 +1,16 @@
 .page-content {
-    padding: 100px 100px;
+    padding: 0;
+}
+
+.color-yellow {
+    color: rgba(30, 222, 40, 0.5)
 }
 
 .color-grey {
     color: rgba(0, 0, 0, 0.4)
+}
+
+.send-message {
+    display: flex;
+    align-items: center;
 }

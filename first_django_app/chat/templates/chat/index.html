@@ -1,9 +1,9 @@
-{%extends "base.html"%} {%block content%} {% if request.user.is_authenticated %}
+ {%extends "base.html"%} {%block content%} {% if request.user.is_authenticated %}
 <div id="messageContainer">
     {% for message in messages %}
 
     <div>
-        <span class="color-grey">[{{message.created_at}}]</span> {{ message.author.first_name }}: <i>{{ message.text }}</i>
+        <span class="color-grey">[{{message.created_at}}]</span> {{ message.author.username }}: <i>{{ message.text }}</i>
     </div>
 
     {% endfor %}
@@ -11,43 +11,66 @@
 <!-- Accent-colored raised button with ripple -->
 <!-- Textfield with Floating Label -->
 <script>
+    var months = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+
+    // Creates a new date
+
+    function createDate() {
+        date = new Date();
+        var d = date.getDate();
+        var m = date.toLocaleString("default", {
+            month: "long"
+        })
+        var y = date.getFullYear();
+        return m + ' ' + d + ',' + ' ' + y
+    }
+
+    //Creates the date from server formatted as a new date
+
+    function createDateFromServer(date) {
+        monthInNumber = date.substring(5, 7) - 1;
+        var y = date.substring(0, 4);
+        var m = months[monthInNumber];
+        var d = date.substring(8, 10);
+        return m + ' ' + d + ',' + ' ' + y
+    }
+
     async function sendMessage() {
         let fd = new FormData();
-        let token = '{{csrf_token}}'
+        let token = '{{csrf_token}}';
         fd.append('textmessage', messagefield.value);
         fd.append('csrfmiddlewaretoken', token);
-
+        messagefield.value = '';
         try {
             messageContainer.innerHTML += ` <div id="deleteMessage">
-             <span class="color-grey">[Date]</span> : {{ request.user.first_name }} <i class="color-grey">${messagefield.value}</i>
-             </div>`;
+             <span class="color-grey">[${createDate()}]</span>  {{ request.user.username }}: <i class="color-grey">${messagefield.value}</i>
+             ></div>`;
             let response = await fetch('/chat/', {
                 method: 'POST',
                 body: fd
             });
-            let json = await response.json();
-            console.log(json)
-
+            let gotFromServer = await response.json();
+            let json = JSON.parse(gotFromServer);
+            let timeToChange = json.fields.created_at;
             document.getElementById('deleteMessage').remove();
             messageContainer.innerHTML += ` <div>
-             <span class="color-grey">[Date]</span> : {{ request.user.first_name }} <i>${messagefield.value}</i>
+             <span class="color-grey">[${createDateFromServer(json.fields.created_at)}]</span>  {{ request.user.username }}: <i>${json.fields.text}</i>
              </div>`;
             console.log('Success!!')
         } catch (e) {
             console.error('Error', e)
-
+            document.getElementById('deleteMessage').remove();
+            messageContainer.innerHTML += ` <div>
+             <span style="color:red"> There went something wrong, please try again later.</span>
+             </div>`;
         }
-
-
-
-    }
-
-    function sendFalse() {
-        return false;
     }
 </script>
 
-<form onsubmit="sendMessage(); sendFalse();" method="post">
+<form style="display:flex; align-items:center" onsubmit="sendMessage(); return false;" method="post">
     {% csrf_token %}
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input name="textmessage" class="mdl-textfield__input" type="text" id="messagefield">
@@ -56,7 +79,9 @@
     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
      Send
  </button>
+    <div class="mdl-spinner mdl-js-spinner is-active"></div>
 </form>
+
 {%else%}
 
 <h1>Not logged in</h1>
