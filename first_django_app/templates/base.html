@@ -29,6 +29,10 @@
             </span>
                 <!-- Add spacer, to align navigation to the right -->
                 <div class="mdl-layout-spacer"></div>
+                {%if request.user.is_authenticated%}
+                <a href="{% url 'logout' %}"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                    Logout
+                  </button></a> {%endif%}
                 <!-- Navigation. We hide it in small screens. -->
             </div>
         </header>

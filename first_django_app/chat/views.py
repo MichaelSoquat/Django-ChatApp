@@ -1,14 +1,18 @@
+from telnetlib import LOGOUT
 from django.dispatch import receiver
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from .models import Chat, Message
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 @login_required(login_url='/login/')
+
+def redirect(request):
+    return HttpResponseRedirect('/chat/')
 
 def index(request):
     if request.method == 'POST':
@@ -26,7 +30,7 @@ def login_view(request):
         user = authenticate(username=request.POST.get('username'), password= request.POST.get('password'))
         if user:
             login(request, user)
-            return HttpResponseRedirect(request.POST.get('redirect'))
+            return HttpResponseRedirect('/chat/')
         else:
             return render(request, 'auth/login.html', {'wrongPassword': True, 'redirect': redirect})
     return render(request,'auth/login.html', {'redirect': redirect})
@@ -53,3 +57,9 @@ def register_view(request):
     return render(request = request,
                   template_name = "auth/register.html",
                   context={"form":form})
+
+    
+def logout_view(request):
+    logout(request) 
+    return HttpResponseRedirect('/login/')
+
