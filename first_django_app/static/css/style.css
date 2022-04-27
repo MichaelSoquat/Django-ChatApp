@@ -1,9 +1,6 @@
 .page-content {
-    padding: 0;
-}
-
-.color-yellow {
-    color: rgba(30, 222, 40, 0.5)
+    padding-left: 100px;
+    padding-top: 100px;
 }
 
 .color-grey {
@@ -13,4 +10,22 @@
 .send-message {
     display: flex;
     align-items: center;
+}
+
+.margin-left {
+    margin-left: 8px;
+}
+
+.d-none {
+    display: none;
+}
+
+.red {
+    color: red;
+}
+
+.hooks {
+    height: 10px;
+    width: 8px;
+    object-fit: cover;
 }

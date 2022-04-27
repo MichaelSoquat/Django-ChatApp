@@ -4,6 +4,7 @@
 
     <div>
         <span class="color-grey">[{{message.created_at}}]</span> {{ message.author.username }}: <i>{{ message.text }}</i>
+        <img class="hooks" src="../static/img/check.png"><img class="hooks" src="../static/img/check.png">
     </div>
 
     {% endfor %}
@@ -11,6 +12,7 @@
 <!-- Accent-colored raised button with ripple -->
 <!-- Textfield with Floating Label -->
 <script>
+    let json = '';
     var months = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
@@ -39,47 +41,60 @@
     }
 
     async function sendMessage() {
+        event.preventDefault();
         let fd = new FormData();
         let token = '{{csrf_token}}';
+        document.getElementById('loading').classList.remove('d-none');
         fd.append('textmessage', messagefield.value);
         fd.append('csrfmiddlewaretoken', token);
         messagefield.value = '';
         try {
-            messageContainer.innerHTML += ` <div id="deleteMessage">
-             <span class="color-grey">[${createDate()}]</span>  {{ request.user.username }}: <i class="color-grey">${messagefield.value}</i>
-             ></div>`;
+            instantMessage();
             let response = await fetch('/chat/', {
                 method: 'POST',
                 body: fd
             });
             let gotFromServer = await response.json();
-            let json = JSON.parse(gotFromServer);
-            let timeToChange = json.fields.created_at;
+            json = JSON.parse(gotFromServer);
             document.getElementById('deleteMessage').remove();
-            messageContainer.innerHTML += ` <div>
-             <span class="color-grey">[${createDateFromServer(json.fields.created_at)}]</span>  {{ request.user.username }}: <i>${json.fields.text}</i>
-             </div>`;
-            console.log('Success!!')
+            serverMessage();
+            document.getElementById('loading').classList.add('d-none')
         } catch (e) {
-            console.error('Error', e)
-            document.getElementById('deleteMessage').remove();
-            messageContainer.innerHTML += ` <div>
+            errorMessage();
+        }
+    }
+
+    function instantMessage() {
+        messageContainer.innerHTML += ` <div id="deleteMessage">
+             <span class="color-grey">[${createDate()}]</span>  {{ request.user.username }}: <i class="color-grey">${messagefield.value}</i>
+             ><img class="hooks" src="../static/img/check.png"></div>`;
+    }
+
+    function serverMessage() {
+        messageContainer.innerHTML += ` <div>
+             <span class="color-grey">[${createDateFromServer(json.fields.created_at)}]</span>  {{ request.user.username }}: <i>${json.fields.text}</i>
+             <img class="hooks" src="../static/img/check.png"><img class="hooks" src="../static/img/check.png"></div>`;
+    }
+
+    function errorMessage() {
+        document.getElementById('deleteMessage').remove();
+        messageContainer.innerHTML += ` <div>
              <span style="color:red"> There went something wrong, please try again later.</span>
              </div>`;
-        }
     }
 </script>
 
-<form style="display:flex; align-items:center" onsubmit="sendMessage(); return false;" method="post">
+<form style="display:flex; align-items:center" onsubmit="sendMessage(event);" method="post">
     {% csrf_token %}
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input name="textmessage" class="mdl-textfield__input" type="text" id="messagefield">
         <label class="mdl-textfield__label" for="messagefield">Text...</label>
+
     </div>
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent margin-left">
      Send
  </button>
-    <div class="mdl-spinner mdl-js-spinner is-active"></div>
+    <div id="loading" class="mdl-spinner mdl-js-spinner is-active margin-left d-none"></div>
 </form>
 
 {%else%}
