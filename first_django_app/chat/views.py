@@ -33,16 +33,6 @@ def login_view(request):
 
 
 def register_view(request):
-    if request.method == 'POST':
-        userName = request.POST.get('username', None)
-        userPass = request.POST.get('password', None)
-        user = user.objects.create(userName, userPass)
-        user.save() 
-        return render(request, 'chat/index.html')    
-    return render(request,'auth/register.html')
-
-
-def register_view(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
