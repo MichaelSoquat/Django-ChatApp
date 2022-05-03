@@ -3,7 +3,7 @@
     {% for message in messages %}
 
     <div>
-        <span class="color-grey">[{{message.created_at}}]</span> {{ message.author.username }}: <i>{{ message.text }}</i>
+        <span class="color-grey">[{{message.created_at}}]</span> {{ message.author.username }}: <i style="word-break: break-all;">{{ message.text }}</i>
         <img class="hooks" src="../static/img/check.png"><img class="hooks" src="../static/img/check.png">
     </div>
 
@@ -36,7 +36,7 @@
         monthInNumber = date.substring(5, 7) - 1;
         var y = date.substring(0, 4);
         var m = months[monthInNumber];
-        var d = date.substring(8, 10);
+        var d = date.substring(9, 10);
         return m + ' ' + d + ',' + ' ' + y
     }
 
@@ -66,13 +66,13 @@
 
     function instantMessage() {
         messageContainer.innerHTML += ` <div id="deleteMessage">
-             <span class="color-grey">[${createDate()}]</span>  {{ request.user.username }}: <i class="color-grey">${messagefield.value}</i>
+             <span class="color-grey">[${createDate()}]</span>  {{ request.user.username }}: <i style="word-break: break-all;" class="color-grey">${messagefield.value}</i>
              ><img class="hooks" src="../static/img/check.png"></div>`;
     }
 
     function serverMessage() {
         messageContainer.innerHTML += ` <div>
-             <span class="color-grey">[${createDateFromServer(json.fields.created_at)}]</span>  {{ request.user.username }}: <i>${json.fields.text}</i>
+             <span class="color-grey">[${createDateFromServer(json.fields.created_at)}]</span>  {{ request.user.username }}: <i style="word-break: break-all;">${json.fields.text}</i>
              <img class="hooks" src="../static/img/check.png"><img class="hooks" src="../static/img/check.png"></div>`;
     }
 
