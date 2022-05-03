@@ -1,4 +1,4 @@
-
+from datetime import date, datetime
 from datetime import date
 from telnetlib import LOGOUT
 from django.dispatch import receiver
@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.contrib.auth.forms import UserCreationForm
-
+from django.db import models
 # login is required
 @login_required(login_url='/login/')
 
@@ -25,9 +25,7 @@ def index(request):
         serialized_obj = serializers.serialize('json', [new_message,])
         return JsonResponse(serialized_obj[1:-1], safe=False)
     date_joined=request.user.date_joined
-    message_created_at= Message.objects.all()[0].time_created_at
-    print(date_joined, message_created_at)
-    chatMessages = Message.objects.filter(chat__id=1)
+    chatMessages = Message.objects.filter(time_created_at__gte=date_joined)
     return render(request, 'chat/index.html', {'messages': chatMessages})
 
 #login
@@ -47,7 +45,9 @@ def register_view(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
+            
             user = form.save()
+            user.date_joined = models.DateTimeField(default=datetime.now())
             username = form.cleaned_data.get('username')
             login(request, user)
             return HttpResponseRedirect('/chat/')
