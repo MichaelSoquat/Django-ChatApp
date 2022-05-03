@@ -34,16 +34,24 @@
     .page-content {
         padding-left: 16px !important;
         padding-right: 16px !important;
+        padding-top: 16px !important;
+    }
+    .page-content h1 {
+        margin-top: 100px;
     }
 }
 
 @media (max-width: 350px) {
     .page-content {
-        padding-left: 5px !important;
-        padding-right: 5px !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        padding-top: 8px !important;
     }
     .welcome-mobile {
         display: none;
+    }
+    .mdl-textfield {
+        width: 250px!important;
     }
 }
 
