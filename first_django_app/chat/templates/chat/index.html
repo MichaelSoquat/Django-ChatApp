@@ -54,8 +54,11 @@
                 method: 'POST',
                 body: fd
             });
+            console.log('response is', response)
             let gotFromServer = await response.json();
             json = JSON.parse(gotFromServer);
+            console.log('mit json is', gotFromServer)
+            console.log('mit parse is', json)
             document.getElementById('deleteMessage').remove();
             serverMessage();
             document.getElementById('loading').classList.add('d-none')
