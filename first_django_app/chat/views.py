@@ -11,11 +11,11 @@ from django.core import serializers
 from django.contrib.auth.forms import UserCreationForm
 from django.db import models
 # login is required
-@login_required(login_url='/login/')
+
 
 def redirect(request):
     return HttpResponseRedirect('/chat/')
-
+@login_required(login_url='/login/')
 #render chat content, create message object
 def index(request):
     if request.method == 'POST':
@@ -26,7 +26,9 @@ def index(request):
             myChat = Chat.objects.create(id=1)
             myChat.save()
         new_message = Message.objects.create(text=request.POST['textmessage'], chat=myChat, author=request.user, receiver=request.user)
+        print(new_message)
         serialized_obj = serializers.serialize('json', [new_message,])
+        print(serialized_obj)
         return JsonResponse(serialized_obj[1:-1], safe=False)
     date_joined=request.user.date_joined
     chatMessages = Message.objects.filter(time_created_at__gte=date_joined)

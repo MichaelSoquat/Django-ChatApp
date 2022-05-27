@@ -1,6 +1,11 @@
 .page-content {
-    padding-left: 100px;
-    padding-top: 100px;
+    padding-left: 16px;
+    padding-top: 16px;
+}
+
+h1 {
+    margin-bottom: 0;
+    margin-top: 64px;
 }
 
 .color-grey {
@@ -13,7 +18,7 @@
 }
 
 .margin-left {
-    margin-left: 8px;
+    margin-left: 16px;
 }
 
 .d-none {
@@ -24,10 +29,19 @@
     color: red;
 }
 
+.show-left {
+    padding: 0;
+}
+
 .hooks {
     height: 10px;
     width: 8px;
     object-fit: cover;
+}
+
+#div_id_username {
+    margin-bottom: 16px;
+    margin-top: 16px;
 }
 
 @media (max-width: 570px) {
@@ -35,9 +49,6 @@
         padding-left: 16px !important;
         padding-right: 16px !important;
         padding-top: 16px !important;
-    }
-    .page-content h1 {
-        margin-top: 100px;
     }
 }
 
@@ -51,7 +62,7 @@
         display: none;
     }
     .mdl-textfield {
-        width: 250px!important;
+        width: 250px !important;
     }
 }
 
@@ -61,5 +72,5 @@
 
 .center h2 {
     font-size: 16px;
-    padding-left: 5px;
+    padding-left: 16px;
 }
