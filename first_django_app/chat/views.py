@@ -3,7 +3,7 @@ from datetime import date
 from telnetlib import LOGOUT
 from django.dispatch import receiver
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from .models import Chat, Message
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -43,6 +43,12 @@ def index(request):
             return render(request, 'chat/index.html', {'messages': chatMessages, 'chats': chats})
         else:
             return render(request, 'chat/index.html', {'noChat': True,})
+
+def channel(request, name):
+    chats = Chat.objects.all()
+    chatMessages = Message.objects.filter(chat__name = name)
+    
+    return render(request, 'chat/index.html', {'messages': chatMessages, 'chats': chats})
 #login
 def login_view(request):
     redirect = request.GET.get('next')

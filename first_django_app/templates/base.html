@@ -49,7 +49,7 @@
                 console.log('mit json is', gotFromServer)
                 console.log('mit parse is', json)
                 let chatrooms = document.getElementById('chatrooms')
-                chatrooms.innerHTML += `<a class="mdl-navigation__link" href="/chat/">${json.fields.name}</a>`;
+                chatrooms.innerHTML += `<a class="mdl-navigation__link" href="/chat/${json.fields.name}/">${json.fields.name}</a>`;
 
             } catch (e) {
                 console.error(e);
@@ -119,7 +119,7 @@
             </dialog>
             <nav id="chatrooms" class="mdl-navigation">
                 {% for chat in chats %}
-                <a class="mdl-navigation__link" href="">{{chat}}</a> {% endfor %}
+                <a class="mdl-navigation__link" href="/chat/{{chat.name}}/">{{chat}}</a> {% endfor %}
             </nav>
         </div>
         <main class="mdl-layout__content">
