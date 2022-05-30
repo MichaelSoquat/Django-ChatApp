@@ -2,9 +2,12 @@
 <div id="messageContainer">
     {% for message in messages %}
 
-    <div>
-        <span class="color-grey">[{{message.created_at}}]</span> {{ message.author.username }}: <i style="word-break: break-all;">{{ message.text }}</i>
-        <img class="hooks" src="../static/img/check.png"><img class="hooks" src="../static/img/check.png">
+    <div class="message-container">
+        <div style="padding:8px;">
+            <span>[{{message.created_at}}]</span> {{ message.author.username }}: <i style="word-break: break-all;">{{ message.text }}</i>
+            <img class="hooks" src="/static/img/check.png"><img class="hooks" src="/static/img/check.png">
+        </div>
+
     </div>
 
     {% endfor %}
@@ -68,15 +71,15 @@
     }
 
     function instantMessage() {
-        messageContainer.innerHTML += ` <div id="deleteMessage">
-             <span class="color-grey">[${createDate()}]</span>  {{ request.user.username }}: <i style="word-break: break-all;" class="color-grey">${messagefield.value}</i>
-             ><img class="hooks" src="../static/img/check.png"></div>`;
+        messageContainer.innerHTML += ` <div id="deleteMessage" class="message-container">
+            <div style="padding:8px;"><span class="color-grey">[${createDate()}]</span>  {{ request.user.username }}: <i style="word-break: break-all;" class="color-grey">${messagefield.value}</i>
+             ><img class="hooks" src="/static/img/check.png"></div></div>`;
     }
 
     function serverMessage() {
-        messageContainer.innerHTML += ` <div>
-             <span class="color-grey">[${createDateFromServer(json.fields.created_at)}]</span>  {{ request.user.username }}: <i style="word-break: break-all;">${json.fields.text}</i>
-             <img class="hooks" src="../static/img/check.png"><img class="hooks" src="../static/img/check.png"></div>`;
+        messageContainer.innerHTML += ` <div class="message-container">
+            <div style="padding:8px;"><span>[${createDateFromServer(json.fields.created_at)}]</span>  {{ request.user.username }}: <i style="word-break: break-all;">${json.fields.text}</i>
+             <img class="hooks" src="/static/img/check.png"><img class="hooks" src="/static/img/check.png"></div></div>`;
     }
 
     function errorMessage() {

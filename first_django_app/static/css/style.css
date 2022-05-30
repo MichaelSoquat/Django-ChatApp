@@ -51,6 +51,28 @@ h1 {
     margin: 8px;
 }
 
+.message-container {
+    width: 180px;
+    height: auto;
+    background-color: rgb(63, 81, 181);
+    color: #fff;
+    padding: 20px;
+    position: relative;
+    margin: 40px;
+    border-radius: 10px;
+}
+
+.message-container:after {
+    content: " ";
+    position: absolute;
+    right: -15px;
+    top: 15px;
+    border-top: 15px solid transparent;
+    border-right: none;
+    border-left: 15px solid rgb(63, 81, 181);
+    border-bottom: 15px solid transparent;
+}
+
 .add-chatroom-container>button {
     margin: 0;
 }
