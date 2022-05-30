@@ -22,25 +22,27 @@ def index(request):
         newChat = Chat.objects.create(name = request.POST['chat'])
         newChat.save()
         serialized_obj = serializers.serialize('json', [newChat,])
-        return JsonResponse(serialized_obj[1:-1], safe=False)
+        return JsonResponse(serialized_obj[1:-1], safe=False,)
     if request.method == 'POST' and 'textmessage' in request.POST:
         print("Received data" + request.POST['textmessage'])
         try:
             myChat = Chat.objects.get(id=1)
         except:
-            myChat = Chat.objects.create(name = 'first')
+            myChat = Chat.objects.create(id = 1, name = 1)
             myChat.save()
         new_message = Message.objects.create(text=request.POST['textmessage'], chat=myChat, author=request.user, receiver=request.user)
         print(new_message)
         serialized_obj = serializers.serialize('json', [new_message,])
         print(serialized_obj)
         return JsonResponse(serialized_obj[1:-1], safe=False)
-        
-    date_joined=request.user.date_joined
-    chatMessages = Message.objects.filter(time_created_at__gte=date_joined)
-    chats = Chat.objects.all()
-    return render(request, 'chat/index.html', {'messages': chatMessages, 'chats': chats})
-
+    if request.method == 'GET':
+        if len(Chat.objects.all()) > 0:
+            date_joined=request.user.date_joined
+            chatMessages = Message.objects.filter(time_created_at__gte=date_joined)
+            chats = Chat.objects.all()
+            return render(request, 'chat/index.html', {'messages': chatMessages, 'chats': chats})
+        else:
+            return render(request, 'chat/index.html', {'noChat': True,})
 #login
 def login_view(request):
     redirect = request.GET.get('next')

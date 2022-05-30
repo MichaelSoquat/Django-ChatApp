@@ -36,10 +36,12 @@
             let token = '{{csrf_token}}';
             fd.append('csrfmiddlewaretoken', token)
             fd.append('chat', channel)
+            fd.append('slug', channel)
             try {
                 let response = await fetch('/chat/', {
                     method: 'POST',
                     body: fd
+
                 })
                 console.log('response is', response)
                 let gotFromServer = await response.json();
@@ -47,11 +49,14 @@
                 console.log('mit json is', gotFromServer)
                 console.log('mit parse is', json)
                 let chatrooms = document.getElementById('chatrooms')
-                chatrooms.innerHTML += `<a class="mdl-navigation__link" href="">${json.fields.name}</a>`;
+                chatrooms.innerHTML += `<a class="mdl-navigation__link" href="/chat/">${json.fields.name}</a>`;
+
             } catch (e) {
                 console.error(e);
             }
-
+            window.addEventListener('click', () => {
+                window.location = ('/chat/')
+            })
         }
     </script>
 </head>

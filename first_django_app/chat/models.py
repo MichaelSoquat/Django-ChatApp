@@ -6,7 +6,6 @@ from django.conf import settings
 class Chat(models.Model):
     created_at = models.DateField(default=date.today)
     name = models.CharField(max_length=128, unique=True, default = None)
-
     def __str__(self):
         return "{0}".format(self.name)
 

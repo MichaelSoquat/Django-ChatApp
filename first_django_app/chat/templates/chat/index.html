@@ -94,13 +94,17 @@
         <label class="mdl-textfield__label" for="messagefield">Text...</label>
 
     </div>
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent margin-left">
+    {% if noChat %}
+    <button disabled="noChat" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent margin-left">
      Send
- </button>
+ </button> {%else%}
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent margin-left">
+    Send
+</button> {%endif%}
     <div id="loading" class="mdl-spinner mdl-js-spinner is-active margin-left d-none"></div>
 </form>
-
-{%else%}
+{% if noChat %}
+<p style="color: red">Please create a chatroom first!</p> {%endif%} {%else%}
 
 <h1>Not logged in</h1>
 <p>You are not logged in at the moment. Please log in.</p><br> Please click <a href="/login/">here</a> {%endif%} {%endblock%}
