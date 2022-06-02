@@ -1,6 +1,6 @@
  {%extends "base.html"%} {%block content%} {% if request.user.is_authenticated %}
 <div id="messageContainer">
-    {% for message in messages %}
+    {% for message in messages %} {% if request.user|stringformat:'s' == message.author.username|stringformat:'s' %}
 
     <div class="message-container">
         <div style="padding:8px;">
@@ -9,105 +9,112 @@
         </div>
 
     </div>
-
-    {% endfor %}
-</div>
-<!-- Accent-colored raised button with ripple -->
-<!-- Textfield with Floating Label -->
-<script>
-    let json = '';
-    var months = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
-
-
-    // Creates a new date
-
-    function createDate() {
-        date = new Date();
-        var d = date.getDate();
-        var m = date.toLocaleString("default", {
-            month: "long"
-        })
-        var y = date.getFullYear();
-        return m + ' ' + d + ',' + ' ' + y
-    }
-
-    //Creates the date from server formatted as a new date
-
-    function createDateFromServer(date) {
-        monthInNumber = date.substring(5, 7) - 1;
-        var y = date.substring(0, 4);
-        var m = months[monthInNumber];
-        var d = date.substring(8);
-        return m + ' ' + d + ',' + ' ' + y
-    }
-
-    async function sendMessage() {
-        event.preventDefault();
-        let fd = new FormData();
-        let token = '{{csrf_token}}';
-        document.getElementById('loading').classList.remove('d-none');
-        fd.append('textmessage', messagefield.value);
-        fd.append('csrfmiddlewaretoken', token);
-        messagefield.value = '';
-        try {
-            instantMessage();
-            let response = await fetch('/chat/', {
-                method: 'POST',
-                body: fd
-            });
-            console.log('response is', response)
-            let gotFromServer = await response.json();
-            json = JSON.parse(gotFromServer);
-            console.log('mit json is', gotFromServer)
-            console.log('mit parse is', json)
-            document.getElementById('deleteMessage').remove();
-            serverMessage();
-            document.getElementById('loading').classList.add('d-none')
-        } catch (e) {
-            errorMessage();
-        }
-    }
-
-    function instantMessage() {
-        messageContainer.innerHTML += ` <div id="deleteMessage" class="message-container">
-            <div style="padding:8px;"><span class="color-grey">[${createDate()}]</span>  {{ request.user.username }}: <i style="word-break: break-all;" class="color-grey">${messagefield.value}</i>
-             ><img class="hooks" src="/static/img/check.png"></div></div>`;
-    }
-
-    function serverMessage() {
-        messageContainer.innerHTML += ` <div class="message-container">
-            <div style="padding:8px;"><span>[${createDateFromServer(json.fields.created_at)}]</span>  {{ request.user.username }}: <i style="word-break: break-all;">${json.fields.text}</i>
-             <img class="hooks" src="/static/img/check.png"><img class="hooks" src="/static/img/check.png"></div></div>`;
-    }
-
-    function errorMessage() {
-        document.getElementById('deleteMessage').remove();
-        messageContainer.innerHTML += ` <div>
-             <span style="color:red"> There went something wrong, please try again later.</span>
-             </div>`;
-    }
-</script>
-
-<form style="display:flex; align-items:center" onsubmit="sendMessage(event);" method="post">
-    {% csrf_token %}
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input name="textmessage" class="mdl-textfield__input" type="text" id="messagefield">
-        <label class="mdl-textfield__label" for="messagefield">Text...</label>
+    {%else%}
+    <div class="message-container-other-author">
+        <div style="padding:8px;">
+            <span>[{{message.created_at}}]</span> {{ message.author.username }}: <i style="word-break: break-all;">{{ message.text }}</i>
+            <img class="hooks" src="/static/img/check.png"><img class="hooks" src="/static/img/check.png">
+        </div>
 
     </div>
-    {% if noChat %}
-    <button disabled="noChat" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent margin-left">
+    {%endif%}{% endfor %}
+
+    <!-- Accent-colored raised button with ripple -->
+    <!-- Textfield with Floating Label -->
+    <script>
+        let json = '';
+        var months = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+
+        // Creates a new date
+
+        function createDate() {
+            date = new Date();
+            var d = date.getDate();
+            var m = date.toLocaleString("default", {
+                month: "long"
+            })
+            var y = date.getFullYear();
+            return m + ' ' + d + ',' + ' ' + y
+        }
+
+        //Creates the date from server formatted as a new date
+
+        function createDateFromServer(date) {
+            monthInNumber = date.substring(5, 7) - 1;
+            var y = date.substring(0, 4);
+            var m = months[monthInNumber];
+            var d = date.substring(8);
+            return m + ' ' + d + ',' + ' ' + y
+        }
+
+        async function sendMessage() {
+            event.preventDefault();
+            let fd = new FormData();
+            let token = '{{csrf_token}}';
+            document.getElementById('loading').classList.remove('d-none');
+            fd.append('textmessage', messagefield.value);
+            fd.append('csrfmiddlewaretoken', token);
+            messagefield.value = '';
+            try {
+                instantMessage();
+                let response = await fetch('/chat/', {
+                    method: 'POST',
+                    body: fd
+                });
+                console.log('response is', response)
+                let gotFromServer = await response.json();
+                json = JSON.parse(gotFromServer);
+                console.log('mit json is', gotFromServer)
+                console.log('mit parse is', json)
+                document.getElementById('deleteMessage').remove();
+                serverMessage();
+                document.getElementById('loading').classList.add('d-none')
+            } catch (e) {
+                errorMessage();
+            }
+        }
+
+        function instantMessage() {
+            messageContainer.innerHTML += ` <div id="deleteMessage" class="message-container">
+            <div style="padding:8px;"><span class="color-grey">[${createDate()}]</span>  {{ request.user.username }}: <i style="word-break: break-all;" class="color-grey">${messagefield.value}</i>
+             ><img class="hooks" src="/static/img/check.png"></div></div>`;
+        }
+
+        function serverMessage() {
+            messageContainer.innerHTML += ` <div class="message-container">
+            <div style="padding:8px;"><span>[${createDateFromServer(json.fields.created_at)}]</span>  {{ request.user.username }}: <i style="word-break: break-all;">${json.fields.text}</i>
+             <img class="hooks" src="/static/img/check.png"><img class="hooks" src="/static/img/check.png"></div></div>`;
+        }
+
+        function errorMessage() {
+            document.getElementById('deleteMessage').remove();
+            messageContainer.innerHTML += ` <div>
+             <span style="color:red"> There went something wrong, please try again later.</span>
+             </div>`;
+        }
+    </script>
+
+    <form style="display:flex; align-items:center" onsubmit="sendMessage(event);" method="post">
+        {% csrf_token %}
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input name="textmessage" class="mdl-textfield__input" type="text" id="messagefield">
+            <label class="mdl-textfield__label" for="messagefield">Text...</label>
+
+        </div>
+        {% if noChat %}
+        <button disabled="noChat" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent margin-left">
      Send
  </button> {%else%}
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent margin-left">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent margin-left">
     Send
 </button> {%endif%}
-    <div id="loading" class="mdl-spinner mdl-js-spinner is-active margin-left d-none"></div>
-</form>
-{% if noChat %}
-<p style="color: red">Please create a chatroom first!</p> {%endif%} {%else%}
+        <div id="loading" class="mdl-spinner mdl-js-spinner is-active margin-left d-none"></div>
+    </form>
+    {% if noChat %}
+    <p style="color: red">Please create a chatroom first!</p> {%endif%} {%else%}
 
-<h1>Not logged in</h1>
-<p>You are not logged in at the moment. Please log in.</p><br> Please click <a href="/login/">here</a> {%endif%} {%endblock%}
+    <h1>Not logged in</h1>
+    <p>You are not logged in at the moment. Please log in.</p><br> Please click <a href="/login/">here</a> {%endif%} {%endblock%}

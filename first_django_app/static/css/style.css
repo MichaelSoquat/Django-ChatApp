@@ -73,6 +73,29 @@ h1 {
     border-bottom: 15px solid transparent;
 }
 
+.message-container-other-author {
+    margin-left: 80px!important;
+    width: 180px;
+    height: auto;
+    background-color: rgb(255, 64, 129);
+    color: #fff;
+    padding: 20px;
+    position: relative;
+    margin: 40px;
+    border-radius: 10px;
+}
+
+.message-container-other-author:after {
+    content: " ";
+    position: absolute;
+    left: -15px;
+    top: 15px;
+    border-top: 15px solid transparent;
+    border-left: none;
+    border-right: 15px solid rgb(255, 64, 129);
+    border-bottom: 15px solid transparent;
+}
+
 .add-chatroom-container>button {
     margin: 0;
 }
