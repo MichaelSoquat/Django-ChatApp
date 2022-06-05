@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 .page-content {
     padding-left: 16px;
     padding-top: 16px;
@@ -74,7 +78,7 @@ h1 {
 }
 
 .message-container-other-author {
-    margin-left: 80px!important;
+    margin-left: 80px !important;
     width: 180px;
     height: auto;
     background-color: rgb(255, 64, 129);

@@ -1,4 +1,10 @@
 {%extends "base.html"%} {%block content%} {% if request.user.is_authenticated %}
+
+<button onclick="scrollToBottom()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+        <i class="material-icons">expand_more</i>
+      </button>
+
+
 <div id="messageContainer">
     {% for message in messages %} {% if request.user|stringformat:'s' == message.author.username|stringformat:'s' %}
 
@@ -23,11 +29,14 @@
 </div>
 <!-- Accent-colored raised button with ripple -->
 <!-- Textfield with Floating Label -->
+<button onclick="scrollToTop()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+    <i class="material-icons">expand_less</i>
+  </button>
 <form style="display:flex; align-items:center" onsubmit="sendMessage('{{csrf_token}}', '{{request.user.username}}');" method="post">
     {% csrf_token %}
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input name="textmessage" class="mdl-textfield__input" type="text" id="messagefield">
-        <label class="mdl-textfield__label" for="messagefield">Text...</label>
+        <label id="end" class="mdl-textfield__label" for="messagefield">Text...</label>
 
     </div>
     {% if noChat %}

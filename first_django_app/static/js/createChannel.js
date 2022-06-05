@@ -1,4 +1,17 @@
+function scrollToBottom() {
+    end.scrollIntoView()
+}
+
+function scrollToTop() {
+    start.scrollIntoView()
+}
+
+
+
+
+
 //open dialog to create a new channel
+
 function openDialog() {
 
     let dialog = document.querySelector('dialog');
