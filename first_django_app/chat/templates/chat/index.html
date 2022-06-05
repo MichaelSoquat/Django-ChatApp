@@ -1,8 +1,7 @@
-{%extends "base.html"%} {%block content%} {% if request.user.is_authenticated %}
-
-<button onclick="scrollToBottom()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+{%extends "base.html"%} {%block content%} {% if request.user.is_authenticated %} {%if messages|length > 3%}
+<button onclick="scrollToBottom()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
         <i class="material-icons">expand_more</i>
-      </button>
+      </button> {%endif%}
 
 
 <div id="messageContainer">
@@ -29,9 +28,10 @@
 </div>
 <!-- Accent-colored raised button with ripple -->
 <!-- Textfield with Floating Label -->
-<button onclick="scrollToTop()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+{%if messages|length > 3%}
+<button onclick="scrollToTop()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
     <i class="material-icons">expand_less</i>
-  </button>
+  </button> {%endif%}
 <form style="display:flex; align-items:center" onsubmit="sendMessage('{{csrf_token}}', '{{request.user.username}}');" method="post">
     {% csrf_token %}
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
