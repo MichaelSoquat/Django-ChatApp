@@ -23,10 +23,22 @@ def index(request):
         newChat.save()
         serialized_obj = serializers.serialize('json', [newChat,])
         return JsonResponse(serialized_obj[1:-1], safe=False,)
+   
+    if request.method == 'GET':
+        if len(Chat.objects.all()) > 0:
+            date_joined=request.user.date_joined
+            chatMessages = Message.objects.filter(time_created_at__gte=date_joined)
+            chats = Chat.objects.all()
+            return render(request, 'chat/index.html', {'chats': chats, 'noChatSelected': True})
+        else:
+            return render(request, 'chat/index.html', {'noChat': True,})
+
+def channel(request, name):
     if request.method == 'POST' and 'textmessage' in request.POST:
         print("Received data" + request.POST['textmessage'])
+        print(name)
         try:
-            myChat = Chat.objects.get(id=1)
+            myChat = Chat.objects.get(name=name)
         except:
             myChat = Chat.objects.create(id = 1, name = 1)
             myChat.save()
@@ -35,20 +47,13 @@ def index(request):
         serialized_obj = serializers.serialize('json', [new_message,])
         print(serialized_obj)
         return JsonResponse(serialized_obj[1:-1], safe=False)
-    if request.method == 'GET':
-        if len(Chat.objects.all()) > 0:
-            date_joined=request.user.date_joined
-            chatMessages = Message.objects.filter(time_created_at__gte=date_joined)
-            chats = Chat.objects.all()
-            return render(request, 'chat/index.html', {'messages': chatMessages, 'chats': chats})
-        else:
-            return render(request, 'chat/index.html', {'noChat': True,})
-
-def channel(request, name):
     chats = Chat.objects.all()
     chatMessages = Message.objects.filter(chat__name = name)
-    
+    print(chatMessages)
     return render(request, 'chat/index.html', {'messages': chatMessages, 'chats': chats})
+
+
+
 #login
 def login_view(request):
     redirect = request.GET.get('next')
@@ -60,6 +65,8 @@ def login_view(request):
         else:
             return render(request, 'auth/login.html', {'wrongPassword': True, 'redirect': redirect})
     return render(request,'auth/login.html', {'redirect': redirect})
+
+
 
 #register
 def register_view(request):
@@ -85,6 +92,8 @@ def register_view(request):
     return render(request = request,
                   template_name = "auth/register.html",
                   context={"form":form})
+
+
 
 #logout
 def logout_view(request):

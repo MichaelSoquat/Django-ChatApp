@@ -7,6 +7,12 @@ let json = '';
  */
 
 async function sendMessage(token, username) {
+    const url = window.location.href;
+
+    const last = url.split("/")
+
+    console.log(last[last.length - 2]);
+    currentChat = last[last.length - 2];
     event.preventDefault();
     let fd = new FormData();
     document.getElementById('loading').classList.remove('d-none');
@@ -15,7 +21,7 @@ async function sendMessage(token, username) {
     messagefield.value = '';
     try {
         instantMessage(username);
-        let response = await fetch('/chat/', {
+        let response = await fetch(`/chat/${currentChat}/`, {
             method: 'POST',
             body: fd
         });
@@ -40,7 +46,7 @@ async function sendMessage(token, username) {
 
 function instantMessage(username) {
     messageContainer.innerHTML += ` <div id="deleteMessage" class="message-container">
-            <div style="padding:8px;"><span class="color-grey">[${createDate()}]</span>  ${username}: <i style="word-break: break-all;" class="color-grey">${messagefield.value}</i>
+            <div style="padding:8px;"><span class="color-grey">[${createDate()}]</span>  ${username}: <p><i style="word-break: break-all;" class="color-grey">${messagefield.value}</i></p>
              ><img class="hooks" src="/static/img/check.png"></div></div>`;
 }
 
@@ -52,8 +58,10 @@ function instantMessage(username) {
 
 function serverMessage(username) {
     messageContainer.innerHTML += ` <div class="message-container">
-            <div style="padding:8px;"><span>[${createDateFromServer(json.fields.created_at)}]</span>  ${username}: <i style="word-break: break-all;">${json.fields.text}</i>
+            <div style="padding:8px;"><span>[${createDateFromServer(json.fields.created_at)}]</span>  ${username}: <p><i style="word-break: break-all;">${json.fields.text}</i></p>
              <img class="hooks" src="/static/img/check.png"><img class="hooks" src="/static/img/check.png"></div></div>`;
+
+
 }
 
 

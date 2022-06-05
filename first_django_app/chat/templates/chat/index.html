@@ -4,7 +4,8 @@
 
     <div class="message-container">
         <div style="padding:8px;">
-            <span>[{{message.created_at}}]</span> {{ message.author.username }}: <i style="word-break: break-all;">{{ message.text }}</i>
+            <span>[{{message.created_at}}]</span> {{ message.author.username }}:
+            <p><i style="word-break: break-all;">{{ message.text }}</i></p>
             <img class="hooks" src="/static/img/check.png"><img class="hooks" src="/static/img/check.png">
         </div>
 
@@ -12,7 +13,8 @@
     {%else%}
     <div class="message-container-other-author">
         <div style="padding:8px;">
-            <span>[{{message.created_at}}]</span> {{ message.author.username }}: <i style="word-break: break-all;">{{ message.text }}</i>
+            <span>[{{message.created_at}}]</span> {{ message.author.username }}:
+            <p><i style="word-break: break-all;">{{ message.text }}</i></p>
             <img class="hooks" src="/static/img/check.png"><img class="hooks" src="/static/img/check.png">
         </div>
 
@@ -31,14 +33,19 @@
     {% if noChat %}
     <button disabled="noChat" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent margin-left">
      Send
- </button> {%else%}
+ </button> {%elif noChatSelected%}
+    <button disabled="noChatSelected" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent margin-left">
+    Send
+</button> {%else%}
     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent margin-left">
     Send
 </button> {%endif%}
     <div id="loading" class="mdl-spinner mdl-js-spinner is-active margin-left d-none"></div>
 </form>
 {% if noChat %}
-<p style="color: red">Please create a chatroom first!</p> {%endif%} {%else%}
+<p style="color: red">Please create a chatroom first!</p>
+{%elif noChatSelected%}
+<p style="color: red">Please select a chatroom first!</p> {%endif%} {%else%}
 
 <h1>Not logged in</h1>
 <p>You are not logged in at the moment. Please log in.</p><br> Please click <a href="/login/">here</a> {%endif%} {%endblock%}

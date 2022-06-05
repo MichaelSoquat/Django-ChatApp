@@ -1,5 +1,6 @@
-//open the dialog
+//open dialog to create a new channel
 function openDialog() {
+
     let dialog = document.querySelector('dialog');
     if (!dialog.showModal) {
         dialogPolyfill.registerDialog(dialog);
@@ -11,7 +12,7 @@ function openDialog() {
 }
 
 /**
- * Create new Channel
+ * Create new Channel, clear value and close it after creating
  * @param {*} token is the csrf_middlewaretoken created in template with django syntax
  */
 function createNewChannel(token) {
